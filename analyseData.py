@@ -186,7 +186,6 @@ fig_box.update_layout(
     )
 )
 
-# fig_box.show()
 
 
 
@@ -356,7 +355,6 @@ fig_time.update_layout(
 fig_time.update_traces(marker=dict(size=10, color='#55c3c7'))
 
 # Show figure
-fig_time.show()
 
 
 
@@ -408,7 +406,6 @@ fig_forum.update_layout(
 fig_forum.update_traces(marker=dict(line=dict(width=1, color='black')))
 
 # Show the figure
-fig_forum.show()
 
 
 
@@ -449,7 +446,6 @@ fig_msgs.update_layout(
 
 fig_msgs.update_traces(marker=dict(size=10, line=dict(width=1, color='#264653')))
 
-fig_msgs.show()
 
 
 
@@ -490,7 +486,6 @@ fig_assign.update_layout(
 
 fig_assign.update_traces(marker=dict(size=9, line=dict(width=1, color='#264653')))
 
-fig_assign.show()
 
 
 # Performance Gap Identification
@@ -541,7 +536,6 @@ fig_gender.update_traces(
     marker=dict(line=dict(width=1, color='#264653'))  # box outline color
 )
 
-fig_gender.show()
 
 
 
@@ -581,7 +575,6 @@ fig_income.update_layout(
 
 fig_income.update_traces(marker=dict(size=10, line=dict(width=1, color='#2c3e50')))
 
-fig_income.show()
 
 
 
@@ -635,7 +628,6 @@ fig_employment.update_traces(
     marker=dict(line=dict(width=1, color='#264653'))  # box outlines
 )
 
-fig_employment.show()
 
 
 
@@ -691,7 +683,6 @@ fig_district.update_layout(
 
 fig_district.update_traces(marker=dict(line=dict(width=1, color='#264653')))
 
-# fig_district.show()
 
 
 
@@ -730,7 +721,6 @@ fig_kids.update_layout(
 
 fig_kids.update_traces(marker=dict(size=10, line=dict(width=1, color='#264653')))
 
-fig_kids.show()
 
 
 
@@ -785,7 +775,6 @@ fig_marital.update_traces(
     marker=dict(line=dict(width=1, color='#264653'))  # box outlines
 )
 
-fig_marital.show()
 
 
 
@@ -843,7 +832,6 @@ fig_edu.update_layout(
 
 fig_edu.update_traces(marker=dict(line=dict(width=1, color='#264653')))
 
-fig_edu.show()
 
 
 
@@ -898,7 +886,6 @@ fig_location_study.update_traces(
     marker=dict(line=dict(width=1, color='#264653'))
 )
 
-fig_location_study.show()
 
 
 # Extracurricular Activity Insights
@@ -938,7 +925,6 @@ fig_participation_pie.update_layout(
     )
 )
 
-fig_participation_pie.show()
 
 # Bar of average performance
 participation_perf = merged_df.groupby("Participation Status")["Average Grade"].mean().reset_index()
@@ -984,7 +970,6 @@ fig_participation_perf.update_layout(
 
 fig_participation_perf.update_traces(marker=dict(line=dict(width=1, color='#264653')))
 
-fig_participation_perf.show()
 
 
 
@@ -998,7 +983,6 @@ fig_leadership = px.bar(
     color_continuous_scale="teal"
 )
 
-fig_leadership.show()
 
 # Melt for radar
 radar_data = merged_df.groupby("Role")[["Average Grade", "Forum Posts", "Completed Assignments", "Time Spent On Materials (Hours)"]].mean().reset_index()
@@ -1018,7 +1002,6 @@ fig_radar = px.line_polar(
 )
 
 fig_radar.update_traces(fill='toself')  # Optional for filled radar look
-fig_radar.show()
 
 
 
@@ -1067,7 +1050,6 @@ fig_violin.update_layout(
 fig_violin.update_traces(meanline_visible=True,
                          marker=dict(color='rgba(42, 157, 143, 0.3)', line=dict(width=1, color='#264653')))
 
-fig_violin.show()
 
 
 
@@ -1102,7 +1084,6 @@ fig_sunburst.update_layout(
     margin=dict(t=50, l=10, r=10, b=10)
 )
 
-fig_sunburst.show()
 
 
 
@@ -1131,7 +1112,6 @@ fig_heat.update_layout(
     coloraxis_colorbar=dict(title='Metric Scale')
 )
 
-fig_heat.show()
 
 
 
@@ -1169,7 +1149,6 @@ fig_archetype_pie.update_layout(
     font=dict(color='#264653', size=13)
 )
 
-fig_archetype_pie.show()
 
 
 
@@ -1190,7 +1169,6 @@ fig_success = px.scatter(
     }
 )
 
-fig_success.show()
 
 
 # Course Design Insights
@@ -1221,7 +1199,6 @@ fig_na.update_layout(
     legend=dict(bgcolor="#ffffff", bordercolor="#cccccc", borderwidth=1)
 )
 
-fig_na.show()
 
 
 
@@ -1260,7 +1237,6 @@ fig_corr.update_layout(
     )
 )
 
-fig_corr.show()
 
 
 
@@ -1292,7 +1268,6 @@ fig_util.update_layout(
     )
 )
 
-fig_util.show()
 
 
 
@@ -1321,7 +1296,6 @@ fig_support.update_layout(
     )
 )
 
-fig_support.show()
 
 
 
@@ -1346,7 +1320,6 @@ fig_access.update_layout(
     )
 )
 
-fig_access.show()
 
 
 
@@ -1378,7 +1351,6 @@ fig_forum_2.update_layout(
     )
 )
 
-fig_forum_2.show()
 
 
 
@@ -1411,7 +1383,6 @@ fig_seasonal.update_layout(
     )
 )
 
-fig_seasonal.show()
 
 
 
@@ -1443,7 +1414,6 @@ fig_weekly.update_layout(
     )
 )
 
-fig_weekly.show()
 
 
 
@@ -1465,7 +1435,6 @@ fig_progress.update_layout(
     title_font=dict(size=18, color="#333333")
 )
 
-fig_progress.show()
 
 
 
@@ -1489,7 +1458,6 @@ fig_dropout.update_layout(
     title_font=dict(size=18, color="#333333")
 )
 
-fig_dropout.show()
 
 
 
