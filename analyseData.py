@@ -1494,7 +1494,7 @@ app.layout = dbc.Container([
     dcc.Graph(figure=fig_radar), 
     dcc.Graph(figure=fig_sunburst), 
     dcc.Graph(figure=fig_heat),
-    dcc.Graph(figure=fig_archetype_pie),
+    # dcc.Graph(figure=fig_archetype_pie),
     dcc.Graph(figure=fig_success),
 
 
