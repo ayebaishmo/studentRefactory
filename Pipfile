@@ -1,0 +1,21 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+ipykernel = "*"
+numpy = "*"
+pandas = "*"
+seaborn = "*"
+matplotlib = "*"
+plotly = "*"
+jupyter-dash = "*"
+dash = "*"
+dash-bootstrap-components = "*"
+notebook = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.13"
