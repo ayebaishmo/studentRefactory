@@ -1127,27 +1127,27 @@ custom_color_map = {
     "Others": "#e2dce4"
 }
 
-fig_archetype_pie = px.pie(
-    merged_df,
-    names="Archetype",
-    title="Distribution of Student Archetypes",
-    hole=0.4,
-    color="Archetype",  # this tells Plotly which column to map
-    color_discrete_map=custom_color_map
-)
+# fig_archetype_pie = px.pie(
+#     merged_df,
+#     names="Archetype",
+#     title="Distribution of Student Archetypes",
+#     hole=0.4,
+#     color="Archetype",  # this tells Plotly which column to map
+#     color_discrete_map=custom_color_map
+# )
 
-# Optional: pull out at-risk students to highlight
-fig_archetype_pie.update_traces(
-    textinfo='percent+label',
-    pull=[0.05 if val == "At-Risk Students" else 0 for val in merged_df["Archetype"]]
-)
+# # Optional: pull out at-risk students to highlight
+# fig_archetype_pie.update_traces(
+#     textinfo='percent+label',
+#     pull=[0.05 if val == "At-Risk Students" else 0 for val in merged_df["Archetype"]]
+# )
 
 # Custom background and font
-fig_archetype_pie.update_layout(
-    paper_bgcolor='#f9fafb',
-    title_font_color='#264653',
-    font=dict(color='#264653', size=13)
-)
+# fig_archetype_pie.update_layout(
+#     paper_bgcolor='#f9fafb',
+#     title_font_color='#264653',
+#     font=dict(color='#264653', size=13)
+# )
 
 
 
