@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[2]:
 
 
 from dash import Dash, html, dcc
@@ -10,7 +9,6 @@ import plotly.express as px
 import pandas as pd
 
 
-# In[3]:
 
 
 # Load data
@@ -21,31 +19,25 @@ activities_df = pd.read_csv('data/extracurricularActivities.csv')
 behavior_df = pd.read_csv('data/behavioralPatterns.csv')
 
 
-# In[4]:
 
 
 demographic_df.head()
 
 
-# In[5]:
 
 
 academic_df
 
 
-# In[6]:
 
 
 activities_df
 
 
-# In[7]:
-
 
 behavior_df
 
 
-# In[8]:
 
 
 # Rename ID columns to StudentID for consistency
@@ -53,7 +45,6 @@ demographic_df.rename(columns={'ID': 'StudentID'}, inplace=True)
 academic_df.rename(columns={'Student ID': 'StudentID'}, inplace=True)
 
 
-# In[9]:
 
 
 merged_df = demographic_df.merge(academic_df, on='StudentID') \
@@ -61,26 +52,21 @@ merged_df = demographic_df.merge(academic_df, on='StudentID') \
                           .merge(behavior_df, on='StudentID')
 
 
-# In[10]:
-
 
 pd.set_option('display.max_columns', None)
 merged_df.head()
 
 
-# In[11]:
 
 
 merged_df.shape
 
 
-# In[12]:
 
 
 print("Duplicated rows:",merged_df.duplicated().sum())
 
 
-# In[13]:
 
 
 missing_representations = ['NA', 'N/A', '', 'na', 'n/a', 'NaN']
@@ -89,7 +75,6 @@ missing_summary = missing_check.sum().sort_values(ascending=False)
 print("Missing values per column (including text forms):\n", missing_summary[missing_summary > 0])
 
 
-# In[14]:
 
 
 cat_columns = merged_df.select_dtypes(include="object").columns
@@ -98,21 +83,15 @@ for col in cat_columns:
     print(f"- {col}: {merged_df[col].nunique()} unique values")
 
 
-# In[15]:
-
 
 # Student with missing grades 
 merged_df['Missing grades'] = merged_df[['Python', 'HCD', 'Communication']].isnull().any(axis=1)
 
 
-# In[16]:
-
 
 # How many student missing grades for each course
 merged_df[['Python', 'HCD', 'Communication']].isnull().sum()
 
-
-# In[17]:
 
 
 # Students who missed all the tests 
@@ -149,7 +128,6 @@ merged_df[merged_df[['Python', 'HCD', 'Communication']].isnull().all(axis=1)]
 # - Missing assessment detection: Track N/A grades to identify students at risk of dropping out
 # - Completion rate correlation: Analyze relationship between individual course grades and overall completion status
 
-# In[18]:
 
 
 grade_map = {'A':4.0, 'A-':3.7, 'B+':3.3, 'B':3.0, 'B-':2.7, 'C+':2.3, 'C':2.0, 'N/A': None}
@@ -157,8 +135,6 @@ grade_cols = ['Javascript', 'Python', 'HCD', 'Communication']
 for col in grade_cols:
     merged_df[col + '_num'] = merged_df[col].map(grade_map)
 
-
-# In[19]:
 
 
 # Melt for some visuals
@@ -168,7 +144,6 @@ melted = merged_df.melt(id_vars=['StudentID', 'Course Completion'],
 melted['Course'] = melted['Course'].str.replace('_num', '')
 
 
-# In[35]:
 
 
 # Grade distribution boxplot
@@ -214,8 +189,6 @@ fig_box.update_layout(
 # fig_box.show()
 
 
-# In[41]:
-
 
 # Grade variance per student
 merged_df['Grade Std Dev'] = merged_df[[col + '_num' for col in grade_cols]].std(axis=1)
@@ -256,7 +229,6 @@ fig_std.update_layout(
 )
 
 
-# In[45]:
 
 
 # Count missing grades per student
@@ -299,7 +271,6 @@ fig_missing.update_layout(
 )
 
 
-# In[47]:
 
 
 # Completion status comparison
@@ -344,7 +315,6 @@ fig_violin.update_layout(
 
 # Behavioral
 
-# In[57]:
 
 
 # correlation between time spent on materials and academic performance.
@@ -389,7 +359,6 @@ fig_time.update_traces(marker=dict(size=10, color='#55c3c7'))
 fig_time.show()
 
 
-# In[64]:
 
 
 # Forum Engagement Impact
@@ -442,7 +411,6 @@ fig_forum.update_traces(marker=dict(line=dict(width=1, color='black')))
 fig_forum.show()
 
 
-# In[71]:
 
 
 # Communication Patterns (Instructor Messages)
@@ -484,7 +452,6 @@ fig_msgs.update_traces(marker=dict(size=10, line=dict(width=1, color='#264653'))
 fig_msgs.show()
 
 
-# In[76]:
 
 
 # Assignment Completion Patterns 
@@ -528,7 +495,6 @@ fig_assign.show()
 
 # Performance Gap Identification
 
-# In[79]:
 
 
 # how demographic groups relate to academic performance (average or per-course grades).
@@ -578,7 +544,6 @@ fig_gender.update_traces(
 fig_gender.show()
 
 
-# In[83]:
 
 
 # Income scatter
@@ -619,7 +584,6 @@ fig_income.update_traces(marker=dict(size=10, line=dict(width=1, color='#2c3e50'
 fig_income.show()
 
 
-# In[90]:
 
 
 # Employment Impact 
@@ -673,8 +637,6 @@ fig_employment.update_traces(
 
 fig_employment.show()
 
-
-# In[100]:
 
 
 # Geographic Factors 
@@ -732,8 +694,6 @@ fig_district.update_traces(marker=dict(line=dict(width=1, color='#264653')))
 # fig_district.show()
 
 
-# In[105]:
-
 
 # Family Responsibility (Number of Children)
 fig_kids = px.scatter(
@@ -773,7 +733,6 @@ fig_kids.update_traces(marker=dict(size=10, line=dict(width=1, color='#264653'))
 fig_kids.show()
 
 
-# In[108]:
 
 
 #  Marital Status Impact 
@@ -829,7 +788,6 @@ fig_marital.update_traces(
 fig_marital.show()
 
 
-# In[112]:
 
 
 # Education Level vs Performance 
@@ -888,7 +846,6 @@ fig_edu.update_traces(marker=dict(line=dict(width=1, color='#264653')))
 fig_edu.show()
 
 
-# In[118]:
 
 
 #  Location-Based Resource Access 
@@ -946,7 +903,6 @@ fig_location_study.show()
 
 # Extracurricular Activity Insights
 
-# In[124]:
 
 
 # Pie of participation
@@ -1031,7 +987,6 @@ fig_participation_perf.update_traces(marker=dict(line=dict(width=1, color='#2646
 fig_participation_perf.show()
 
 
-# In[137]:
 
 
 # Leadership Roles Correlation 
@@ -1066,7 +1021,6 @@ fig_radar.update_traces(fill='toself')  # Optional for filled radar look
 fig_radar.show()
 
 
-# In[ ]:
 
 
 # Time Management (Hours in Activities vs. Performance) 
@@ -1116,7 +1070,6 @@ fig_violin.update_traces(meanline_visible=True,
 fig_violin.show()
 
 
-# In[164]:
 
 
 # Sunburst for nested breakdown (if multiple levels like Activity Type → Role)
@@ -1152,7 +1105,6 @@ fig_sunburst.update_layout(
 fig_sunburst.show()
 
 
-# In[167]:
 
 
 # Activity vs Engagement Heatmap 
@@ -1182,13 +1134,9 @@ fig_heat.update_layout(
 fig_heat.show()
 
 
-# In[126]:
 
 
 print(merged_df.columns.tolist())
-
-
-# In[176]:
 
 
 custom_color_map = {
@@ -1224,7 +1172,6 @@ fig_archetype_pie.update_layout(
 fig_archetype_pie.show()
 
 
-# In[ ]:
 
 
 # Scatter plot for Success Predictors
@@ -1248,7 +1195,6 @@ fig_success.show()
 
 # Course Design Insights
 
-# In[201]:
 
 
 # Count N/As
@@ -1278,7 +1224,6 @@ fig_na.update_layout(
 fig_na.show()
 
 
-# In[208]:
 
 
 subjects = ["Javascript", "Python", "HCD", "Communication"]
@@ -1318,8 +1263,6 @@ fig_corr.update_layout(
 fig_corr.show()
 
 
-# In[209]:
-
 
 fig_util = px.scatter(
     merged_df,
@@ -1352,8 +1295,6 @@ fig_util.update_layout(
 fig_util.show()
 
 
-# In[211]:
-
 
 fig_support = px.box(
     merged_df,
@@ -1383,8 +1324,6 @@ fig_support.update_layout(
 fig_support.show()
 
 
-# In[212]:
-
 
 fig_access = px.box(
     merged_df,
@@ -1409,8 +1348,6 @@ fig_access.update_layout(
 
 fig_access.show()
 
-
-# In[214]:
 
 
 # Ensure 'Date' column is in datetime format
@@ -1443,12 +1380,6 @@ fig_forum_2.update_layout(
 
 fig_forum_2.show()
 
-
-# Temporal Trend Analysis
-# 
-# Time-Based Patterns
-
-# In[217]:
 
 
 # How engagement and grades vary across the academic calendar 
@@ -1483,7 +1414,6 @@ fig_seasonal.update_layout(
 fig_seasonal.show()
 
 
-# In[218]:
 
 
 merged_df["Weekday"] = merged_df["Date"].dt.day_name()
@@ -1516,7 +1446,6 @@ fig_weekly.update_layout(
 fig_weekly.show()
 
 
-# In[219]:
 
 
 performance_over_time = merged_df.groupby("Date")["Average Grade"].mean().reset_index()
@@ -1539,7 +1468,6 @@ fig_progress.update_layout(
 fig_progress.show()
 
 
-# In[220]:
 
 
 dropouts = merged_df[merged_df["Course Completion"] == "Incomplete"]
@@ -1563,8 +1491,6 @@ fig_dropout.update_layout(
 
 fig_dropout.show()
 
-
-# In[ ]:
 
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -1617,23 +1543,9 @@ app.layout = dbc.Container([
 
 
 ])
+if __name__ == "__main__":
+    app.run(debug=True)
 
-app.run(debug=True)
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
-
-
-
-
-
-# In[ ]:
 
 
 

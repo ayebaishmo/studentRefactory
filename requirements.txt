@@ -1,0 +1,9 @@
+ipykernel
+numpy
+pandas
+seaborn
+matplotlib
+plotly
+jupyter-dash
+dash
+dash-bootstrap-components
