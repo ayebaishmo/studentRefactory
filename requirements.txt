@@ -8,3 +8,4 @@ jupyter-dash
 dash
 dash-bootstrap-components
 gunicorn
+statsmodels
