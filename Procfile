@@ -1,1 +1,1 @@
-web: gunicorn analysisData:app.server
+web: gunicorn analyseData:app.server
