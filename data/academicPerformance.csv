@@ -1,0 +1,21 @@
+Student ID,Attendance %,Javascript,Python,HCD,Communication,Course Completion
+S001,95,A,C,B+,C+,Completed
+S002,88,B,B-,C+,A,Completed
+S003,72,C,N/A,A,B,Incomplete
+S004,93,A-,B,B,B+,Completed
+S005,89,B+,A-,A+,C+,Completed
+S006,75,C+,B+,C,N/A,Incomplete
+S007,96,A,C+,B-,B,Completed
+S008,85,B,A,A,A+,Completed
+S009,98,A+,B,B,A,Completed
+S010,70,C,B+,N/A,B,Incomplete
+S011,80,B-,C+,A,A+,Completed
+S012,94,A,A,B,C,Completed
+S013,82,B,B,C,B-,Completed
+S014,92,A-,A+,A-,A,Completed
+S015,87,B+,C,A-,B,Completed
+S016,74,N/A,B-,B+,B+,Incomplete
+S017,96,A,A,C+,C+,Completed
+S018,80,B,B,A,A,Completed
+S019,91,A,A-,A-,B,Completed
+S020,60,C-,B+,N/A,A+,Incomplete

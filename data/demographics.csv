@@ -1,0 +1,21 @@
+ID,Age,Marital Status,Employment Status,Gender,Socioeconomic Status,Income Level,Location,District,Education Level,Number Of Children
+S001,22,Single,Part-time,Female,Middle,25000,Urban,Kampala,Undergraduate,0
+S002,24,Married,Full-time,Male,High,60000,Suburban,Wakiso,Postgraduate,2
+S003,20,Single,Unemployed,Female,Low,15000,Rural,Mukono,Undergraduate,1
+S004,21,Single,Part-time,Male,Middle,22000,Urban,Kampala,Undergraduate,0
+S005,23,Married,Full-time,Female,High,55000,Suburban,Wakiso,Postgraduate,3
+S006,19,Single,Unemployed,Female,Low,12000,Rural,Kampala,High School,0
+S007,25,Married,Full-time,Male,High,70000,Suburban,Gulu,Postgraduate,1
+S008,21,Single,Part-time,Female,Middle,30000,Urban,Fort Portal,Undergraduate,0
+S009,22,Married,Part-time,Male,Middle,35000,Suburban,Mukono,Undergraduate,1
+S010,24,Divorced,Full-time,Female,Low,20000,Urban,Kampala,Undergraduate,2
+S011,20,Single,Unemployed,Male,Low,10000,Rural,Wakiso,High School,0
+S012,23,Single,Part-time,Female,High,50000,Suburban,Gulu,Postgraduate,0
+S013,21,Married,Full-time,Male,Middle,40000,Urban,Kampala,Undergraduate,1
+S014,20,Single,Unemployed,Female,Low,13000,Suburban,Fort Portal,High School,0
+S015,22,Single,Full-time,Female,Middle,28000,Urban,Mukono,Undergraduate,0
+S016,24,Married,Part-time,Male,High,45000,Rural,Wakiso,Postgraduate,2
+S017,25,Married,Full-time,Female,Middle,52000,Suburban,Gulu,Postgraduate,1
+S018,23,Single,Full-time,Female,High,60000,Urban,Kampala,Postgraduate,0
+S019,21,Single,Unemployed,Male,Low,14000,Rural,Mukono,High School,0
+S020,20,Single,Part-time,Female,Middle,27000,Suburban,Fort Portal,Undergraduate,0
