@@ -146,45 +146,61 @@ melted['Course'] = melted['Course'].str.replace('_num', '')
 
 
 
-# Grade distribution boxplot
-fig_box = px.box(
-    melted,
-    x='Course',
-    y='Grade',
-    color='Course', 
-    color_discrete_sequence=['#55c3c7', '#744674', '#684c64']
-)
+def GradeBoxplot(melted_df):
+    """
+    Creates a styled boxplot figure for grade distribution across courses.
+    melted_df: DataFrame with columns 'Course', 'Grade'
+    """
+    # Define your custom colors for courses
+    custom_colors = ['#55c3c7', '#744674', '#684c64']
 
-# Update the layout (styling)
-fig_box.update_layout(
-    title='Grade Distribution Across Courses',
-    plot_bgcolor='white',
-    paper_bgcolor='#f9f9f9',
-    font=dict(
-        family='Arial',
-        size=14,
-        color='black'
-    ),
-    xaxis=dict(
-        title='Course',
-        tickfont=dict(color='black'),
-        showgrid=True,
-        gridcolor='lightgray',
-        zeroline=False
-    ),
-    yaxis=dict(
-        title='Grade',
-        showgrid=True,
-        gridcolor='lightgray',
-        zeroline=False
-    ),
-    legend=dict(
-        bgcolor='white',
-        bordercolor='gray',
-        borderwidth=1,
-        font=dict(color='black')
+    fig_box = px.box(
+        melted_df,
+        x='Course',
+        y='Grade',
+        color='Course',
+        color_discrete_sequence=custom_colors
     )
-)
+
+    fig_box.update_layout(
+        title='Grade Distribution Across Courses',
+        plot_bgcolor='white',
+        paper_bgcolor='#f9f9f9',
+        font=dict(
+            family='Arial',
+            size=14,
+            color='black'
+        ),
+        xaxis=dict(
+            title='Course',
+            tickfont=dict(color='black'),
+            showgrid=True,
+            gridcolor='lightgray',
+            zeroline=False
+        ),
+        yaxis=dict(
+            title='Grade',
+            showgrid=True,
+            gridcolor='lightgray',
+            zeroline=False
+        ),
+        legend=dict(
+            bgcolor='white',
+            bordercolor='gray',
+            borderwidth=1,
+            font=dict(color='black')
+        )
+    )
+
+    return html.Div(
+        className="chart-card",  # You can style the container with CSS if needed
+        children=[
+            dcc.Graph(
+                figure=fig_box,
+                config={'displayModeBar': False}
+            )
+        ]
+    )
 
 
 
@@ -1459,6 +1475,147 @@ fig_dropout.update_layout(
 )
 
 
+def create_kpi_cards(merged_df):
+    # Mapping all known grades
+    grade_map = {
+        "A": 4, "A-": 3.7,
+        "B+": 3.5, "B": 3, "B-": 2.7,
+        "C+": 2.5, "C": 2, "C-": 1.7,
+        "D": 1, "F": 0
+    }
+
+    # Replace grades with numeric values, unrecognized become NaN
+    df_num = merged_df.copy()
+    for col in ["Javascript", "Python", "HCD", "Communication"]:
+        df_num[col] = df_num[col].map(grade_map).astype(float)
+
+    # Calculate averages safely
+    avg_js = round(df_num["Javascript"].mean(skipna=True), 1)
+    avg_py = round(df_num["Python"].mean(skipna=True), 1)
+    avg_hcd = round(df_num["HCD"].mean(skipna=True), 1)
+    avg_comm = round(df_num["Communication"].mean(skipna=True), 1)
+
+    return dbc.Row([
+        dbc.Col(dbc.Card( 
+            dbc.CardBody([
+                html.H6("Avg JavaScript", className="card-title"),
+                html.Div([
+                    html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
+                    html.H2(avg_js, className="card-value", style={'margin': 0})
+                    ], style={'display': 'flex', 'alignItems': 'center'}), 
+                html.Small("average grade per course", className="card-desc"),
+            ], className="CardB")
+        ), width=3),
+
+        dbc.Col(dbc.Card(
+            dbc.CardBody([
+                html.H6("Avg Python", className="card-title"),
+                html.Div([
+                    html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
+                    html.H2(avg_py, className="card-value", style={'margin': 0})
+                    ], style={'display': 'flex', 'alignItems': 'center'}), 
+                html.Small("average grade per course", className="card-desc"),
+            ], className="CardB")
+        ), width=3),
+
+        dbc.Col(dbc.Card(
+            dbc.CardBody([
+                html.H6("Avg HCD", className="card-title"),
+                html.Div([
+                    html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
+                    html.H2(avg_hcd, className="card-value", style={'margin': 0})
+                    ], style={'display': 'flex', 'alignItems': 'center'}), 
+                html.Small("average grade per course", className="card-desc"),
+            ], className="CardB")
+        ), width=3),
+
+        dbc.Col(dbc.Card(
+            dbc.CardBody([
+                html.H6("Avg Communication", className="card-title"),
+                html.Div([
+                    html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
+                    html.H2(avg_comm, className="card-value", style={'margin': 0})
+                    ], style={'display': 'flex', 'alignItems': 'center'}), 
+                html.Small("average grade per course", className="card-desc"),
+            ], className="CardB")
+        ), width=3),
+    ], className="mb-4")
+
+def GradePieChart(merged_df):
+    """
+    Generates a styled pie chart for grade distribution.
+    df: pandas DataFrame containing grade data
+    """
+    # Count grade distribution
+    grade_counts = merged_df['Javascript'].value_counts().reset_index()
+    grade_counts.columns = ['Grade', 'Count']
+
+    custom_colors = ["#e3dde5", '#55c3c7', '#684c64', '#AB63FA', '#FFA15A', '#19D3F3']
+
+    # Create Pie Chart
+    fig = px.pie(
+        grade_counts,
+        names='Grade',
+        values='Count',
+        title="JavaScript Grade Distribution",
+        hole=0.4,
+        color_discrete_sequence=custom_colors
+    )
+
+    # Force legend to appear
+    fig.update_traces(
+        textinfo='percent',  # Only % on chart
+        hovertemplate='%{label}: %{value} students (%{percent})<extra></extra>'
+    )
+
+    fig.update_layout(
+        showlegend=True,  # Force legend
+        legend_title="Grades",
+        plot_bgcolor='rgba(0,0,0,0)', 
+        paper_bgcolor='rgba(0,0,0,0)',
+        font=dict(color="black")
+    )
+
+    return html.Div(
+        className="chart-card",
+        children=[
+            dcc.Graph(
+                figure=fig,
+                config={'displayModeBar': False}
+            )
+        ]
+    )
+
+
+def create_engagement_cards(merged_df):
+    metrics = [
+        ("Avg Time on Materials (hrs)", "Time Spent On Materials (Hours)", "assets/materials.png"),
+        ("Average Forum Posts", "Forum Posts", "assets/forum.png"),
+        ("Avg Instructor Messages", "Instructor Messages", "assets/messages.png"),
+        ("Avg Completed Assignments", "Completed Assignments", "assets/assignments.png")
+    ]
+
+    cards = []
+    for title, col, icon in metrics:
+        avg_value = round(merged_df[col].mean(skipna=True), 1)
+        cards.append(
+            dbc.Col(
+                dbc.Card(
+                    dbc.CardBody([
+                        html.H6(title, className="card-title"),
+                        html.Div([
+                            html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
+                            html.H2(avg_value, className="card-value", style={'margin': 0})
+                        ], style={'display': 'flex', 'alignItems': 'center'}),
+                        html.Small("average engagement metric", className="card-desc"),
+                    ], className="CardB")
+                ),
+                width=3
+            )
+        )
+
+    return dbc.Row(cards, className="mb-4")
+
 
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
@@ -1466,19 +1623,30 @@ app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 app.layout = dbc.Container([
     html.Div([
         html.Img(src='assets/refactory_logo.png', style={'height': '50px'}),
+        html.H4("Refactory Student Analysis Dashboard", className="my-3"),
     ], className="d-flex align-items-center gap-3"),
-    html.H4("Refactory Student Analysis Dashboard", className="my-3"),
 
-    dcc.Graph(figure=fig_box),
-    dcc.Graph(figure=fig_std),
-    dcc.Graph(figure=fig_missing),
-    dcc.Graph(figure=fig_violin),
+      #  CARDS
+    create_kpi_cards(merged_df),
+    dbc.Row([
+        dbc.Col(GradePieChart(merged_df), width=6),
+        dbc.Col(GradeBoxplot(melted), width=6),
+    ]),
+
+    dcc.Graph(figure=fig_std, className="chart-card"),
+    dbc.Row([
+        dbc.Col(dcc.Graph(figure=fig_missing, style={"height": "600px"}, className="chart-card")),
+        dbc.Col(dcc.Graph(figure=fig_violin, style={"height": "600px"},  className="chart-card")),
+    ]),
 
     html.H4("Behavioral", className="my-3"),
-    dcc.Graph(figure=fig_time),
-    dcc.Graph(figure=fig_forum),
-    dcc.Graph(figure=fig_msgs),
-    dcc.Graph(figure=fig_assign),
+    create_engagement_cards(merged_df),
+    dbc.Row([
+        dbc.Col(dcc.Graph(figure=fig_time, style={"height": "600px"}, className="chart-card")),
+        dbc.Col(dcc.Graph(figure=fig_msgs, style={"height": "600px"}, className="chart-card")),
+    ]),
+    dcc.Graph(figure=fig_forum, className="chart-card"),
+    dcc.Graph(figure=fig_assign, className="chart-card"),
 
     html.H4("Demography", className="my-3"),
     dcc.Graph(figure=fig_gender),
