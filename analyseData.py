@@ -1649,33 +1649,33 @@ app.layout = dbc.Container([
     dcc.Graph(figure=fig_assign, className="chart-card"),
 
     html.H4("Demography", className="my-3"),
-    dcc.Graph(figure=fig_gender),
-    dcc.Graph(figure=fig_income),
-    dcc.Graph(figure=fig_employment),
-    dcc.Graph(figure=fig_district),
-    dcc.Graph(figure=fig_edu), 
-    dcc.Graph(figure=fig_location_study), 
+    dcc.Graph(figure=fig_gender, className="chart-card"),
+    dcc.Graph(figure=fig_income, className="chart-card"),
+    dcc.Graph(figure=fig_employment, className="chart-card"),
+    dcc.Graph(figure=fig_district, className="chart-card"),
+    dcc.Graph(figure=fig_edu, className="chart-card"), 
+    dcc.Graph(figure=fig_location_study, className="chart-card"), 
 
 
     html.H4("Extracurricular Activity", className="my-3"),
-    dcc.Graph(figure=fig_leadership), 
-    dcc.Graph(figure=fig_radar), 
-    dcc.Graph(figure=fig_sunburst), 
-    dcc.Graph(figure=fig_heat),
+    dcc.Graph(figure=fig_leadership, className="chart-card"), 
+    dcc.Graph(figure=fig_radar, className="chart-card"), 
+    dcc.Graph(figure=fig_sunburst, className="chart-card"), 
+    dcc.Graph(figure=fig_heat, className="chart-card"),
     # dcc.Graph(figure=fig_archetype_pie),
     dcc.Graph(figure=fig_success),
 
 
     html.H4("Course Design Insights", className="my-3"),
-    dcc.Graph(figure=fig_na),
-    dcc.Graph(figure=fig_corr),
-    dcc.Graph(figure=fig_util),
-    dcc.Graph(figure=fig_support),
-    dcc.Graph(figure=fig_access),
-    dcc.Graph(figure=fig_forum_2),
+    dcc.Graph(figure=fig_na, className="chart-card"),
+    dcc.Graph(figure=fig_corr, className="chart-card"),
+    dcc.Graph(figure=fig_util, className="chart-card"),
+    dcc.Graph(figure=fig_support, className="chart-card"),
+    dcc.Graph(figure=fig_access, className="chart-card"),
+    dcc.Graph(figure=fig_forum_2, className="chart-card"),
 
     html.H4("Temporal Trend Analysis", className="my-3"),
-    dcc.Graph(figure=fig_forum_2),
+    dcc.Graph(figure=fig_forum_2, className="chart-card"),
 
 
 ])
