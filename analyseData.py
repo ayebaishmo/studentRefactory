@@ -7,6 +7,12 @@ from dash import Dash, html, dcc
 import dash_bootstrap_components as dbc
 import plotly.express as px
 import pandas as pd
+from dash import html, dcc, Input, Output, State, callback
+import google.generativeai as genai
+import joblib
+import numpy as np
+import shap
+import os
 
 
 
@@ -242,7 +248,6 @@ fig_std.update_layout(
     ),
     bargap=0.1,
 )
-
 
 
 
@@ -1503,7 +1508,7 @@ def create_kpi_cards(merged_df):
                     html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
                     html.H2(avg_js, className="card-value", style={'margin': 0})
                     ], style={'display': 'flex', 'alignItems': 'center'}), 
-                html.Small("average grade per course", className="card-desc"),
+                html.Small("average grade", className="card-desc"),
             ], className="CardB")
         ), width=3),
 
@@ -1514,7 +1519,7 @@ def create_kpi_cards(merged_df):
                     html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
                     html.H2(avg_py, className="card-value", style={'margin': 0})
                     ], style={'display': 'flex', 'alignItems': 'center'}), 
-                html.Small("average grade per course", className="card-desc"),
+                html.Small("average grade", className="card-desc"),
             ], className="CardB")
         ), width=3),
 
@@ -1525,7 +1530,7 @@ def create_kpi_cards(merged_df):
                     html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
                     html.H2(avg_hcd, className="card-value", style={'margin': 0})
                     ], style={'display': 'flex', 'alignItems': 'center'}), 
-                html.Small("average grade per course", className="card-desc"),
+                html.Small("average grade", className="card-desc"),
             ], className="CardB")
         ), width=3),
 
@@ -1536,7 +1541,7 @@ def create_kpi_cards(merged_df):
                     html.Img(src='assets/speed.png', style={'height': '30px', 'marginRight': '10px'}),
                     html.H2(avg_comm, className="card-value", style={'margin': 0})
                     ], style={'display': 'flex', 'alignItems': 'center'}), 
-                html.Small("average grade per course", className="card-desc"),
+                html.Small("average grade", className="card-desc"),
             ], className="CardB")
         ), width=3),
     ], className="mb-4")
@@ -1616,7 +1621,336 @@ def create_engagement_cards(merged_df):
 
     return dbc.Row(cards, className="mb-4")
 
+def DemographyForm():
+    return dbc.Card(
+        [
+            html.H5("Demography Data", className="card-title mb-3"),
 
+            dbc.Form([
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Label("Age"),
+                        dbc.Input(type="number", id="age", placeholder="Enter Age", min=0, required=True),
+                    ], md=4),
+
+                    dbc.Col([
+                        dbc.Label("Marital Status"),
+                        dbc.Select(
+                            id="marital_status",
+                            options=[
+                                {"label": "Single", "value": "Single"},
+                                {"label": "Married", "value": "Married"},
+                                {"label": "Divorced", "value": "Divorced"},
+                                {"label": "Widowed", "value": "Widowed"},
+                            ],
+                            value="Single"
+                        ),
+                    ], md=4),
+
+                    dbc.Col([
+                        dbc.Label("Employment Status"),
+                        dbc.Select(
+                            id="employment_status",
+                            options=[
+                                {"label": "Unemployed", "value": "Unemployed"},
+                                {"label": "Part-time", "value": "Part-time"},
+                                {"label": "Full-time", "value": "Full-time"},
+                                {"label": "Self-employed", "value": "Self-employed"},
+                            ],
+                            value="Unemployed"
+                        ),
+                    ], md=4),
+                ], className="mb-3"),
+
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Label("Gender"),
+                        dbc.Select(
+                            id="gender_demo",
+                            options=[
+                                {"label": "Male", "value": "Male"},
+                                {"label": "Female", "value": "Female"},
+                                {"label": "Other", "value": "Other"},
+                            ],
+                            value="Male"
+                        ),
+                    ], md=4),
+
+                    dbc.Col([
+                        dbc.Label("Socioeconomic Status"),
+                        dbc.Select(
+                            id="socioeconomic",
+                            options=[
+                                {"label": "Low", "value": "Low"},
+                                {"label": "Middle", "value": "Middle"},
+                                {"label": "High", "value": "High"},
+                            ],
+                            value="Middle"
+                        ),
+                    ], md=4),
+
+                    dbc.Col([
+                        dbc.Label("Income Level"),
+                        dbc.Input(type="number", id="income_level", placeholder="Enter Income", min=0, required=True),
+                    ], md=4),
+                ], className="mb-3"),
+
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Label("Location"),
+                        dbc.Select(
+                            id="location",
+                            options=[
+                                {"label": "Urban", "value": "Urban"},
+                                {"label": "Rural", "value": "Rural"},
+                            ],
+                            value="Urban"
+                        ),
+                    ], md=4),
+
+                    dbc.Col([
+                        dbc.Label("District"),
+                        dbc.Input(type="text", id="district_demo", placeholder="Enter District"),
+                    ], md=4),
+
+                    dbc.Col([
+                        dbc.Label("Education Level"),
+                        dbc.Select(
+                            id="education",
+                            options=[
+                                {"label": "Primary", "value": "Primary"},
+                                {"label": "Secondary", "value": "Secondary"},
+                                {"label": "Undergraduate", "value": "Undergraduate"},
+                                {"label": "Postgraduate", "value": "Postgraduate"},
+                            ],
+                            value="Undergraduate"
+                        ),
+                    ], md=4),
+                ], className="mb-3"),
+
+                dbc.Row([
+                    dbc.Col([
+                        dbc.Label("Number of Children"),
+                        dbc.Input(type="number", id="children", placeholder="Enter Number of Children", min=0, required=True),
+                    ], md=4),
+                ], className="mb-3"),
+
+                dbc.Button("Submit", id="submit_demography", color="primary", className="mt-2"),
+                html.Div(id="form_output", className="mt-3 text-success"),
+            ])
+        ],
+        body=True,
+        className="mb-4 shadow-sm"
+    )
+
+
+# Load the trained model
+model = joblib.load("student_performance_model.pkl")
+label_encoders = joblib.load("label_encoders.pkl")
+
+
+def PerformanceImpactChart(df: pd.DataFrame, label_encoders: dict):
+    # Encode categorical columns
+    categorical_cols = [
+        "StudentID","Marital Status","Employment Status","Gender","Socioeconomic Status",
+        "Location","District","Education Level","Javascript","Python","HCD","Communication",
+        "Course Completion","Activity","Participation Status","Role","Start Date","End Date","Date"
+    ]
+    df_enc = df.copy()
+    for col in categorical_cols:
+        if col in df_enc.columns and col in label_encoders:
+            df_enc[col] = label_encoders[col].transform(df_enc[col].astype(str))
+
+    # Select features used during training
+    feature_cols = model.feature_names_in_
+    X = df_enc[feature_cols].fillna(0)
+
+    # SHAP explainer (without check_additivity)
+    explainer = shap.TreeExplainer(model, feature_perturbation="interventional")
+    shap_values = explainer.shap_values(X)
+
+    # Aggregate impact
+    import numpy as np
+    import pandas as pd
+    import plotly.express as px
+
+    importance = np.abs(shap_values).mean(axis=0)
+    importance_df = pd.DataFrame({"Feature": feature_cols, "Impact": importance}).sort_values("Impact", ascending=False)
+
+    # Plotly figure
+    fig = px.bar(
+        importance_df,
+        x="Impact",
+        y="Feature",
+        orientation="h",
+        title="Impact of Features on Student Performance",
+        color="Impact",
+        color_continuous_scale="Viridis"
+    )
+    fig.update_layout(yaxis=dict(autorange="reversed"))
+
+    return fig
+
+
+def WhatIfPerformanceComponent(df: pd.DataFrame, label_encoders: dict, height: int = 600):
+    """
+    Returns a Dash dbc.Col containing sliders for what-if analysis and a SHAP bar chart.
+    """
+    # Define a unique ID for callbacks
+    component_id = "whatif-performance"
+
+    layout = dbc.Col([
+        html.H5("Student Performance What-If Analysis"),
+
+        # Attendance % slider
+        html.Label("Attendance %"),
+        dcc.Slider(
+            id=f"{component_id}-attendance-slider",
+            min=0,
+            max=100,
+            step=1,
+            value=df["Attendance %"].mean(),
+            marks={i: str(i) for i in range(0, 101, 10)}
+        ),
+
+        # Hours per week slider
+        html.Label("Hours Per Week"),
+        dcc.Slider(
+            id=f"{component_id}-hours-slider",
+            min=0,
+            max=20,
+            step=0.5,
+            value=df["Hours Per Week"].mean(),
+            marks={i: str(i) for i in range(0, 21, 2)}
+        ),
+
+        # SHAP graph
+        dcc.Graph(
+            id=f"{component_id}-shap-graph",
+            style={"height": f"{height}px"}
+        )
+    ], width=6)
+
+    # Create the callback for interactivity
+    @app.callback(
+        Output(f"{component_id}-shap-graph", "figure"),
+        Input(f"{component_id}-attendance-slider", "value"),
+        Input(f"{component_id}-hours-slider", "value")
+    )
+    def update_shap(attendance_val, hours_val):
+        # Copy the dataframe
+        df_copy = df.copy()
+        # Apply sliders to first student for simplicity
+        df_copy.loc[0, "Attendance %"] = attendance_val
+        df_copy.loc[0, "Hours Per Week"] = hours_val
+
+        # Encode categorical columns
+        categorical_cols = [
+            "StudentID","Marital Status","Employment Status","Gender","Socioeconomic Status",
+            "Location","District","Education Level","Javascript","Python","HCD","Communication",
+            "Course Completion","Activity","Participation Status","Role","Start Date","End Date","Date"
+        ]
+        df_enc = df_copy.copy()
+        for col in categorical_cols:
+            if col in df_enc.columns and col in label_encoders:
+                df_enc[col] = label_encoders[col].transform(df_enc[col].astype(str))
+
+        # Select features used in training
+        feature_cols = model.feature_names_in_
+        X = df_enc[feature_cols].fillna(0)
+
+        # SHAP explainer
+        explainer = shap.TreeExplainer(model, feature_perturbation="interventional")
+        shap_values = explainer.shap_values(X)
+
+        # Aggregate impact
+        importance = np.abs(shap_values).mean(axis=0)
+        importance_df = pd.DataFrame({"Feature": feature_cols, "Impact": importance}).sort_values("Impact", ascending=False)
+
+        # Plotly figure
+        fig = px.bar(
+            importance_df,
+            x="Impact",
+            y="Feature",
+            orientation="h",
+            title=f"Predicted Performance Score: {model.predict(X)[0]:.2f}",
+            color="Impact",
+            color_continuous_scale="Viridis"
+        )
+        fig.update_layout(yaxis=dict(autorange="reversed"))
+
+        return fig
+
+    return layout
+
+# Configure Gemini API
+from dotenv import load_dotenv
+
+load_dotenv()
+
+genai.configure(api_key=os.getenv("API"))
+
+def GeminiQnA(df: pd.DataFrame, component_id: str = "gemini-qna"):
+    """
+    Creates a reusable Gemini Q&A component for a dataframe.
+    
+    Args:
+        df (pd.DataFrame): DataFrame to query
+        component_id (str): base id for Dash components (to allow multiple instances)
+    
+    Returns:
+        html.Div: Dash layout component
+    """
+    return html.Div([
+        html.H3("Ask Questions About the Data"),
+        
+        dcc.Textarea(
+            id=f"{component_id}-input",
+            placeholder="Ask a question about the dataset...",
+            style={"width": "100%", "height": "100px"}
+        ),
+        html.Button("ASK AI", id=f"{component_id}-btn", n_clicks=0),
+        
+        html.Div(id=f"{component_id}-output", 
+                 style={"marginTop": "20px", "whiteSpace": "pre-wrap"})
+    ])
+
+
+def register_callbacks(app, df: pd.DataFrame, component_id: str = "gemini-qna"):
+    """
+    Registers the callbacks for a Gemini Q&A component instance.
+    """
+    @app.callback(
+        Output(f"{component_id}-output", "children"),
+        Input(f"{component_id}-btn", "n_clicks"),
+        State(f"{component_id}-input", "value"),
+        prevent_initial_call=True
+    )
+    def ask_gemini(n, question):
+        if not question:
+            return "Please enter a question."
+        
+        try:
+            # Build prompt
+            prompt = f"""
+            You are a data assistant. 
+            Answer the question using the pandas dataframe provided below.
+
+            DataFrame (sample):
+            {df.head(10).to_string()}
+
+            Question: {question}
+
+            Provide a clear answer.
+            """
+
+            model = genai.GenerativeModel("gemini-1.5-flash")
+            response = model.generate_content(prompt)
+
+            return response.text
+        
+        except Exception as e:
+            return f"Error: {str(e)}"
 
 app = Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
 
@@ -1677,6 +2011,25 @@ app.layout = dbc.Container([
     html.H4("Temporal Trend Analysis", className="my-3"),
     dcc.Graph(figure=fig_forum_2, className="chart-card"),
 
+    dbc.Col(DemographyForm(), width=12),
+
+    # Add Gemini component to app layout
+    dbc.Col(GeminiQnA(merged_df, "student-qna"), width=12),
+
+# Register its callbacks
+    dbc.Col(register_callbacks(app, merged_df, "student-qna")),
+
+    dbc.Row([
+        dbc.Col(
+            dcc.Graph(
+                figure=PerformanceImpactChart(merged_df, label_encoders),
+                className="chart-card",
+                style={"height": "600px"}
+            ), width=6
+        ),
+
+    ]),
+    dbc.Col(WhatIfPerformanceComponent(merged_df, label_encoders))
 
 ])
 if __name__ == "__main__":

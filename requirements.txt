@@ -9,3 +9,8 @@ dash
 dash-bootstrap-components
 gunicorn
 statsmodels
+scikit-learn
+numpy==2.2
+shap==0.48.0
+google-generativeai
+python-dotenv
